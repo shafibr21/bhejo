@@ -14,7 +14,7 @@ import { Package, MapPin, User, CreditCard } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
 interface BookParcelFormProps {
-  onSuccess?: (parcel: any) => void
+  onSuccess?: (parcel: any) => void;
 }
 
 export function BookParcelForm({ onSuccess }: BookParcelFormProps) {
@@ -34,18 +34,18 @@ export function BookParcelForm({ onSuccess }: BookParcelFormProps) {
     },
     paymentType: "prepaid" as "cod" | "prepaid",
     codAmount: "",
-  })
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
-  const { toast } = useToast()
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError("")
-    setLoading(true)
+    e.preventDefault();
+    setError("");
+    setLoading(true);
 
     try {
-      const token = localStorage.getItem("token")
+      const token = localStorage.getItem("token");
       const response = await fetch("/api/parcels", {
         method: "POST",
         headers: {
@@ -60,17 +60,20 @@ export function BookParcelForm({ onSuccess }: BookParcelFormProps) {
             width: Number.parseFloat(formData.dimensions.width),
             height: Number.parseFloat(formData.dimensions.height),
           },
-          codAmount: formData.paymentType === "cod" ? Number.parseFloat(formData.codAmount) : 0,
+          codAmount:
+            formData.paymentType === "cod"
+              ? Number.parseFloat(formData.codAmount)
+              : 0,
         }),
-      })
+      });
 
       if (response.ok) {
-        const { parcel } = await response.json()
+        const { parcel } = await response.json();
         toast({
           title: "Parcel Booked Successfully!",
           description: `Tracking Number: ${parcel.trackingNumber}`,
-        })
-        onSuccess?.(parcel)
+        });
+        onSuccess?.(parcel);
         // Reset form
         setFormData({
           senderName: "",
@@ -84,32 +87,32 @@ export function BookParcelForm({ onSuccess }: BookParcelFormProps) {
           dimensions: { length: "", width: "", height: "" },
           paymentType: "prepaid",
           codAmount: "",
-        })
+        });
       } else {
-        const { error } = await response.json()
-        setError(error || "Failed to book parcel")
+        const { error } = await response.json();
+        setError(error || "Failed to book parcel");
       }
     } catch (error) {
-      setError("An error occurred. Please try again.")
+      setError("An error occurred. Please try again.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleInputChange = (field: string, value: string) => {
     if (field.includes(".")) {
-      const [parent, child] = field.split(".")
+      const [parent, child] = field.split(".");
       setFormData((prev) => ({
         ...prev,
         [parent]: {
           ...(prev as any)[parent],
           [child]: value,
         },
-      }))
+      }));
     } else {
-      setFormData((prev) => ({ ...prev, [field]: value }))
+      setFormData((prev) => ({ ...prev, [field]: value }));
     }
-  }
+  };
 
   return (
     <Card className="w-full max-w-4xl mx-auto">
@@ -118,7 +121,9 @@ export function BookParcelForm({ onSuccess }: BookParcelFormProps) {
           <Package className="h-5 w-5" />
           Book a Parcel
         </CardTitle>
-        <CardDescription>Fill in the details to book your parcel for delivery</CardDescription>
+        <CardDescription>
+          Fill in the details to book your parcel for delivery
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -140,7 +145,9 @@ export function BookParcelForm({ onSuccess }: BookParcelFormProps) {
                 <Input
                   id="senderName"
                   value={formData.senderName}
-                  onChange={(e) => handleInputChange("senderName", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("senderName", e.target.value)
+                  }
                   required
                 />
               </div>
@@ -150,7 +157,9 @@ export function BookParcelForm({ onSuccess }: BookParcelFormProps) {
                   id="senderPhone"
                   type="tel"
                   value={formData.senderPhone}
-                  onChange={(e) => handleInputChange("senderPhone", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("senderPhone", e.target.value)
+                  }
                   required
                 />
               </div>
@@ -160,7 +169,9 @@ export function BookParcelForm({ onSuccess }: BookParcelFormProps) {
               <Textarea
                 id="senderAddress"
                 value={formData.senderAddress}
-                onChange={(e) => handleInputChange("senderAddress", e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("senderAddress", e.target.value)
+                }
                 required
               />
             </div>
@@ -178,7 +189,9 @@ export function BookParcelForm({ onSuccess }: BookParcelFormProps) {
                 <Input
                   id="recipientName"
                   value={formData.recipientName}
-                  onChange={(e) => handleInputChange("recipientName", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("recipientName", e.target.value)
+                  }
                   required
                 />
               </div>
@@ -188,7 +201,9 @@ export function BookParcelForm({ onSuccess }: BookParcelFormProps) {
                   id="recipientPhone"
                   type="tel"
                   value={formData.recipientPhone}
-                  onChange={(e) => handleInputChange("recipientPhone", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("recipientPhone", e.target.value)
+                  }
                   required
                 />
               </div>
@@ -198,7 +213,9 @@ export function BookParcelForm({ onSuccess }: BookParcelFormProps) {
               <Textarea
                 id="recipientAddress"
                 value={formData.recipientAddress}
-                onChange={(e) => handleInputChange("recipientAddress", e.target.value)}
+                onChange={(e) =>
+                  handleInputChange("recipientAddress", e.target.value)
+                }
                 required
               />
             </div>
@@ -213,7 +230,12 @@ export function BookParcelForm({ onSuccess }: BookParcelFormProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="parcelType">Parcel Type</Label>
-                <Select value={formData.parcelType} onValueChange={(value) => handleInputChange("parcelType", value)}>
+                <Select
+                  value={formData.parcelType}
+                  onValueChange={(value) =>
+                    handleInputChange("parcelType", value)
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select parcel type" />
                   </SelectTrigger>
@@ -244,7 +266,9 @@ export function BookParcelForm({ onSuccess }: BookParcelFormProps) {
                   id="length"
                   type="number"
                   value={formData.dimensions.length}
-                  onChange={(e) => handleInputChange("dimensions.length", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("dimensions.length", e.target.value)
+                  }
                   required
                 />
               </div>
@@ -254,7 +278,9 @@ export function BookParcelForm({ onSuccess }: BookParcelFormProps) {
                   id="width"
                   type="number"
                   value={formData.dimensions.width}
-                  onChange={(e) => handleInputChange("dimensions.width", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("dimensions.width", e.target.value)
+                  }
                   required
                 />
               </div>
@@ -264,7 +290,9 @@ export function BookParcelForm({ onSuccess }: BookParcelFormProps) {
                   id="height"
                   type="number"
                   value={formData.dimensions.height}
-                  onChange={(e) => handleInputChange("dimensions.height", e.target.value)}
+                  onChange={(e) =>
+                    handleInputChange("dimensions.height", e.target.value)
+                  }
                   required
                 />
               </div>
@@ -282,7 +310,9 @@ export function BookParcelForm({ onSuccess }: BookParcelFormProps) {
                 <Label htmlFor="paymentType">Payment Type</Label>
                 <Select
                   value={formData.paymentType}
-                  onValueChange={(value: "cod" | "prepaid") => handleInputChange("paymentType", value)}
+                  onValueChange={(value: "cod" | "prepaid") =>
+                    handleInputChange("paymentType", value)
+                  }
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -301,7 +331,9 @@ export function BookParcelForm({ onSuccess }: BookParcelFormProps) {
                     type="number"
                     step="0.01"
                     value={formData.codAmount}
-                    onChange={(e) => handleInputChange("codAmount", e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("codAmount", e.target.value)
+                    }
                     required
                   />
                 </div>
@@ -309,11 +341,15 @@ export function BookParcelForm({ onSuccess }: BookParcelFormProps) {
             </div>
           </div>
 
-          <Button type="submit" className="w-full" disabled={loading}>
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={loading}
+          >
             {loading ? "Booking Parcel..." : "Book Parcel"}
           </Button>
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }

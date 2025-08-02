@@ -1,18 +1,28 @@
-import jwt from 'jsonwebtoken';
-import { UserRole } from '@/models/userModel';
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
-const JWT_SECRET = process.env.JWT_SECRET as string;
+const JWT_SECRET = process.env.JWT_SECRET || "fallback-secret";
 
-if (!JWT_SECRET) throw new Error('Missing JWT_SECRET in env');
-
-export function signJWT(payload: { userId: string; role: UserRole }) {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: '7d' });
+export function signJWT(payload: any): string {
+  return jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" });
 }
 
-export function verifyJWT(token: string): { userId: string; role: UserRole } | null {
+export function verifyJWT(token: string): any {
   try {
-    return jwt.verify(token, JWT_SECRET) as { userId: string; role: UserRole };
-  } catch {
+    return jwt.verify(token, JWT_SECRET);
+  } catch (error) {
+    console.error("JWT verification failed:", error);
     return null;
   }
+}
+
+export async function hashPassword(password: string): Promise<string> {
+  return bcrypt.hash(password, 12);
+}
+
+export async function comparePassword(
+  password: string,
+  hashedPassword: string
+): Promise<boolean> {
+  return bcrypt.compare(password, hashedPassword);
 }

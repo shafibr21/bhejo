@@ -1,24 +1,36 @@
-import jwt from "jsonwebtoken"
-import bcrypt from "bcryptjs"
+import { MongoClient, type Db } from "mongodb"
 
-const JWT_SECRET = process.env.JWT_SECRET || "fallback-secret"
-
-export function signJWT(payload: any): string {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: "7d" })
+if (!process.env.MONGODB_URI) {
+  throw new Error('Invalid/Missing environment variable: "MONGODB_URI"')
 }
 
-export function verifyJWT(token: string): any {
-  try {
-    return jwt.verify(token, JWT_SECRET)
-  } catch (error) {
-    return null
+const uri = process.env.MONGODB_URI
+const options = {}
+
+let client: MongoClient
+let clientPromise: Promise<MongoClient>
+
+if (process.env.NODE_ENV === "development") {
+  // In development mode, use a global variable so that the value
+  // is preserved across module reloads caused by HMR (Hot Module Replacement).
+  const globalWithMongo = global as typeof globalThis & {
+    _mongoClientPromise?: Promise<MongoClient>
   }
+
+  if (!globalWithMongo._mongoClientPromise) {
+    client = new MongoClient(uri, options)
+    globalWithMongo._mongoClientPromise = client.connect()
+  }
+  clientPromise = globalWithMongo._mongoClientPromise
+} else {
+  // In production mode, it's best to not use a global variable.
+  client = new MongoClient(uri, options)
+  clientPromise = client.connect()
 }
 
-export async function hashPassword(password: string): Promise<string> {
-  return bcrypt.hash(password, 12)
-}
+export default clientPromise
 
-export async function comparePassword(password: string, hashedPassword: string): Promise<boolean> {
-  return bcrypt.compare(password, hashedPassword)
+export async function getDatabase(): Promise<Db> {
+  const client = await clientPromise
+  return client.db("courier_management")
 }

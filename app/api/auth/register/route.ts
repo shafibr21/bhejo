@@ -1,17 +1,52 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { connectToDB } from '@/lib/mongodb';
-import User from '@/models/userModel';
-import bcrypt from 'bcryptjs';
+import { type NextRequest, NextResponse } from "next/server"
+import { getDatabase } from "@/lib/mongodb"
+import { hashPassword, signJWT } from "@/lib/auth"
 
-export async function POST(req: NextRequest) {
-  const { name, email, password, role } = await req.json();
-  await connectToDB();
+export async function POST(request: NextRequest) {
+  try {
+    const { name, email, password, role, phone, address } = await request.json()
 
-  const existing = await User.findOne({ email });
-  if (existing) return NextResponse.json({ error: 'Email already in use' }, { status: 400 });
+    if (!name || !email || !password || !role) {
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
+    }
 
-  const hashedPassword = await bcrypt.hash(password, 10);
-  const user = await User.create({ name, email, password: hashedPassword, role });
+    const db = await getDatabase()
 
-  return NextResponse.json({ message: 'User created successfully' });
+    // Check if user already exists
+    const existingUser = await db.collection("users").findOne({ email })
+    if (existingUser) {
+      return NextResponse.json({ error: "User already exists" }, { status: 409 })
+    }
+
+    const hashedPassword = await hashPassword(password)
+
+    const newUser = {
+      name,
+      email,
+      password: hashedPassword,
+      role,
+      phone: phone || "",
+      address: address || "",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
+
+    const result = await db.collection("users").insertOne(newUser)
+
+    const token = signJWT({
+      userId: result.insertedId.toString(),
+      email,
+      role,
+    })
+
+    const { password: _, ...userWithoutPassword } = newUser
+
+    return NextResponse.json({
+      token,
+      user: { ...userWithoutPassword, _id: result.insertedId },
+    })
+  } catch (error) {
+    console.error("Registration error:", error)
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+  }
 }
