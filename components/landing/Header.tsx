@@ -16,7 +16,7 @@ export default function Header() {
               </div>
             </div>
             <span className="ml-3 text-2xl font-bold bg-gradient-to-r from-white via-blue-100 to-cyan-200 bg-clip-text text-transparent">
-              Bhejo
+              CourierPro
             </span>
           </div>
           <div className="flex space-x-4">
