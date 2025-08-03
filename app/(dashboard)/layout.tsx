@@ -80,7 +80,7 @@ export default function DashboardLayout({
   const navItems = getNavItems();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 flex">
+    <div className="relative min-h-screen h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 flex overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
@@ -103,64 +103,65 @@ export default function DashboardLayout({
         ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
         lg:translate-x-0 lg:static lg:inset-0
       `}
+        style={{ top: 0 }}
       >
         <div className="flex items-center justify-between h-16 px-6 border-b border-slate-700/50">
           <div className="flex items-center">
-            <Package className="h-8 w-8 text-blue-400" />
-            <span className="ml-2 text-xl font-bold text-white">
-              CourierPro
-            </span>
+        <Package className="h-8 w-8 text-blue-400" />
+        <span className="ml-2 text-xl font-bold text-white">
+          CourierPro
+        </span>
           </div>
           <Button
-            variant="ghost"
-            size="icon"
-            className="lg:hidden text-slate-400 hover:text-white hover:bg-slate-800"
-            onClick={() => setSidebarOpen(false)}
+        variant="ghost"
+        size="icon"
+        className="lg:hidden text-slate-400 hover:text-white hover:bg-slate-800"
+        onClick={() => setSidebarOpen(false)}
           >
-            <X className="h-4 w-4" />
+        <X className="h-4 w-4" />
           </Button>
         </div>
 
         <div className="flex flex-col">
           <div className="flex-1 px-4 py-6">
-            <div className="mb-6">
-              <p className="text-sm text-slate-400">Welcome back,</p>
-              <p className="font-semibold text-white">{user.name}</p>
-              <p className="text-xs text-slate-400 capitalize">{user.role}</p>
-            </div>
+        <div className="mb-6">
+          <p className="text-sm text-slate-400">Welcome back,</p>
+          <p className="font-semibold text-white">{user.name}</p>
+          <p className="text-xs text-slate-400 capitalize">{user.role}</p>
+        </div>
 
-            <nav className="space-y-2">
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="flex items-center px-3 py-2 text-sm font-medium text-slate-300 rounded-lg hover:bg-slate-800/50 hover:text-white transition-all duration-200 group"
-                  onClick={() => setSidebarOpen(false)}
-                >
-                  <item.icon className="mr-3 h-4 w-4 text-slate-400 group-hover:text-blue-400 transition-colors" />
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
+        <nav className="space-y-2">
+          {navItems.map((item) => (
+            <Link
+          key={item.href}
+          href={item.href}
+          className="flex items-center px-3 py-2 text-sm font-medium text-slate-300 rounded-lg hover:bg-slate-800/50 hover:text-white transition-all duration-200 group"
+          onClick={() => setSidebarOpen(false)}
+            >
+          <item.icon className="mr-3 h-4 w-4 text-slate-400 group-hover:text-blue-400 transition-colors" />
+          {item.label}
+            </Link>
+          ))}
+        </nav>
           </div>
 
           <div className="p-4 border-t border-slate-700/50">
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-red-400 hover:text-red-300 hover:bg-red-900/20 transition-all duration-200"
-              onClick={logout}
-            >
-              <LogOut className="mr-3 h-4 w-4" />
-              Sign Out
-            </Button>
+        <Button
+          variant="ghost"
+          className="w-full justify-start text-red-400 hover:text-red-300 hover:bg-red-900/20 transition-all duration-200"
+          onClick={logout}
+        >
+          <LogOut className="mr-3 h-4 w-4" />
+          Sign Out
+        </Button>
           </div>
         </div>
       </div>
 
       {/* Main content */}
-      <div className="flex-1">
+      <div className="flex-1 flex flex-col h-screen overflow-hidden">
         {/* Top bar */}
-        <div className="bg-slate-800/30 backdrop-blur-sm border-b border-slate-700/50">
+        <div className="bg-slate-800/30 backdrop-blur-sm border-b border-slate-700/50 flex-shrink-0">
           <div className="flex items-center justify-between h-16 px-6">
             <Button
               variant="ghost"
@@ -184,7 +185,7 @@ export default function DashboardLayout({
         </div>
 
         {/* Page content */}
-        <main className="p-5">{children}</main>
+        <main className="flex-1 overflow-y-auto p-2 md:p-5">{children}</main>
       </div>
     </div>
   );

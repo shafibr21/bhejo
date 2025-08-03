@@ -195,7 +195,7 @@ export function ManagementSection({
         </div>
 
         {/* Total Users */}
-        <div className="group p-6 rounded-2xl bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10">
+        <div className="group  p-2 md:p-6 rounded-2xl bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10">
           <div className="flex items-center justify-between mb-4">
             <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition-all duration-300">
               <Users className="h-6 w-6 text-blue-400" />
@@ -215,7 +215,7 @@ export function ManagementSection({
       {/* Management Components Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Agent Assignment Section */}
-        <div className="p-6 rounded-2xl bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10">
+        <div className="p-2 md:p-6 rounded-2xl bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10">
           <AgentAssignment
             parcels={parcels}
             agents={agents}
@@ -224,7 +224,7 @@ export function ManagementSection({
         </div>
 
         {/* Report Export Section */}
-        <div className="p-6 rounded-2xl bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/10">
+        <div className="p-2 md:p-6 rounded-2xl bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-purple-500/10">
           <ReportExport parcels={parcels} users={users} />
         </div>
       </div>

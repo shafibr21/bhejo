@@ -47,21 +47,21 @@ export default function AdminDashboard() {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl animate-pulse delay-500"></div>
       </div>
 
-      <div className="relative z-10 space-y-8 p-8">
+      <div className="relative z-10 space-y-8 p-2 md:p-8">
         {/* Dashboard Header */}
-        <div className="p-6 rounded-2xl bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10">
+        <div className="p-2 md:p-6 rounded-2xl bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10">
           <DashboardHeader />
         </div>
 
         {/* Dashboard Stats */}
-        <div className="p-6 rounded-2xl bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10">
+        <div className="p-2 md:p-6 rounded-2xl bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10">
           <AdminDashboardStats analytics={analytics} />
         </div>
 
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Management Section */}
-          <div className="lg:col-span-2 p-6 rounded-2xl bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10">
+          <div className="lg:col-span-2 p-2 md:p-6 rounded-2xl bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10">
             <ManagementSection
               parcels={parcels}
               agents={agents}
@@ -73,19 +73,19 @@ export default function AdminDashboard() {
           {/* Sidebar */}
           <div className="lg:col-span-1 space-y-6">
             {/* Live Notifications */}
-            <div className="p-6 rounded-2xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10">
+            <div className=" p-2 md:p-6 rounded-2xl bg-gradient-to-br from-blue-500/10 to-purple-500/10 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10">
               <LiveNotifications />
             </div>
 
             {/* QR Code Generator */}
-            <div className="p-6 rounded-2xl bg-gradient-to-br from-green-500/10 to-blue-500/10 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/10">
+            <div className="p-2 md:p-6 rounded-2xl bg-gradient-to-br from-green-500/10 to-blue-500/10 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-green-500/10">
               <QRCodeGenerator parcels={parcels} />
             </div>
           </div>
         </div>
 
         {/* Dashboard Charts */}
-        <div className="p-6 rounded-2xl bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10">
+        <div className="p-2 md:p-6 rounded-2xl bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10">
           <DashboardCharts statusStats={analytics.statusStats} />
         </div>
 
@@ -121,7 +121,7 @@ export default function AdminDashboard() {
         </div>
 
         {/* Recent Parcels */}
-        <div className="p-6 rounded-2xl bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10">
+        <div className="p-2 md:p-6 rounded-2xl bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10">
           <RecentParcels recentParcels={analytics.recentParcels} />
         </div>
       </div>
