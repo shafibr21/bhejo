@@ -110,28 +110,41 @@ export function AdminDashboardStats({ analytics }: AdminDashboardStatsProps) {
         const TrendIcon = isIncrease ? TrendingUp : TrendingDown
         
         return (
-          <Card key={index}>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className={`p-3 rounded-lg ${stat.bgColor}`}>
-                    <Icon className={`h-5 w-5 ${stat.color}`} />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-600">{stat.title}</p>
-                    <p className="text-2xl font-bold">{stat.value}</p>
-                  </div>
-                </div>
+          <div 
+            key={index} 
+            className="group p-6 rounded-2xl bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-all duration-300 hover:shadow-xl hover:shadow-blue-500/10 hover:scale-105"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className={`p-3 rounded-xl bg-gradient-to-br ${stat.bgColor} transition-all duration-300`}>
+                <Icon className={`h-6 w-6 ${stat.color}`} />
               </div>
-              <div className="mt-4 flex items-center gap-1">
-                <TrendIcon className={`h-3 w-3 ${isIncrease ? 'text-green-600' : 'text-red-600'}`} />
-                <span className={`text-xs ${isIncrease ? 'text-green-600' : 'text-red-600'}`}>
-                  {stat.change}
-                </span>
-                <span className="text-xs text-gray-500">from last week</span>
+              <div className="text-right">
+                <p className="text-2xl font-bold text-white">{stat.value}</p>
+                <p className="text-sm font-medium text-white/70">{stat.title}</p>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <div className={`p-1 rounded-full ${isIncrease ? 'bg-green-500/20' : 'bg-red-500/20'}`}>
+                <TrendIcon className={`h-3 w-3 ${isIncrease ? 'text-green-400' : 'text-red-400'}`} />
+              </div>
+              <span className={`text-sm font-medium ${isIncrease ? 'text-green-400' : 'text-red-400'}`}>
+                {stat.change}
+              </span>
+              <span className="text-sm text-white/50">from last week</span>
+            </div>
+            
+            {/* Progress bar */}
+            <div className="mt-4 w-full bg-white/10 rounded-full h-2">
+              <div 
+                className={`bg-gradient-to-r ${stat.bgColor.replace('/20', '/60').replace('/30', '/60')} h-2 rounded-full transition-all duration-1000`} 
+                style={{width: `${60 + (index * 5)}%`}}
+              ></div>
+            </div>
+            
+            {/* Decorative gradient line */}
+            <div className={`mt-3 w-12 h-0.5 bg-gradient-to-r ${stat.bgColor.replace('/20', '').replace('/30', '')} rounded-full`}></div>
+          </div>
         )
       })}
     </div>

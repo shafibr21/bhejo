@@ -1,17 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import {
   Package,
   MapPin,
@@ -52,137 +41,166 @@ export function ParcelCard({
   };
 
   return (
-    <Card className="w-full">
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Package className="h-4 w-4" />
-            {parcel.trackingNumber}
-          </CardTitle>
-          <Badge
-            className={
-              STATUS_COLORS[parcel.status as keyof typeof STATUS_COLORS]
-            }
-          >
-            {STATUS_LABELS[parcel.status as keyof typeof STATUS_LABELS]}
-          </Badge>
-        </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <h4 className="font-semibold flex items-center gap-1">
-              <User className="h-3 w-3" />
-              Sender
-            </h4>
-            <p className="text-sm text-gray-600">{parcel.senderName}</p>
-            <p className="text-sm text-gray-500 flex items-center gap-1">
-              <Phone className="h-3 w-3" />
-              {parcel.senderPhone}
-            </p>
-          </div>
-          <div className="space-y-2">
-            <h4 className="font-semibold flex items-center gap-1">
-              <MapPin className="h-3 w-3" />
-              Recipient
-            </h4>
-            <p className="text-sm text-gray-600">{parcel.recipientName}</p>
-            <p className="text-sm text-gray-500 flex items-center gap-1">
-              <Phone className="h-3 w-3" />
-              {parcel.recipientPhone}
-            </p>
-            {parcel.recipientEmail && (
-              <p className="text-sm text-gray-500 flex items-center gap-1">
-                <Mail className="h-3 w-3" />
-                {parcel.recipientEmail}
-              </p>
-            )}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-          <div>
-            <span className="font-medium">Type:</span> {parcel.parcelType}
-          </div>
-          <div>
-            <span className="font-medium">Weight:</span> {parcel.weight} kg
-          </div>
-          <div>
-            <span className="font-medium">Payment:</span>{" "}
-            {parcel.paymentType.toUpperCase()}
-            {parcel.paymentType === "cod" &&
-              parcel.codAmount &&
-              ` (₹${parcel.codAmount})`}
-          </div>
-        </div>
-
-        <div className="flex items-center gap-4 text-sm text-gray-500">
-          <div className="flex items-center gap-1">
-            <Calendar className="h-3 w-3" />
-            Created: {formatDate(parcel.createdAt)}
-          </div>
-          {parcel.assignedAgent && (
-            <div className="flex items-center gap-1">
-              <Truck className="h-3 w-3" />
-              Agent: {parcel.agentName}
+    <div>
+      <div className="max-w-4xl mx-auto">
+        <div className="relative bg-slate-900/90 backdrop-blur-sm border border-slate-800/50 rounded-xl shadow-lg w-full">
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600/20 via-cyan-500/20 to-blue-600/20 rounded-xl blur opacity-50"></div>
+          <div className="relative">
+            <div className="p-4 sm:p-6 pb-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+                  <Package className="h-4 w-4 text-blue-400" />
+                  {parcel.trackingNumber}
+                </h3>
+                <span
+                  className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                    STATUS_COLORS[parcel.status]
+                  }`}
+                >
+                  {STATUS_LABELS[parcel.status]}
+                </span>
+              </div>
             </div>
-          )}
-        </div>
+            <div className="p-4 sm:p-6 pt-0 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-3">
+                  <h4 className="font-semibold flex items-center gap-2 text-slate-300">
+                    <User className="h-4 w-4 text-blue-400" />
+                    Sender
+                  </h4>
+                  <div className="space-y-2 pl-6">
+                    <p className="text-sm text-slate-200">
+                      {parcel.senderName}
+                    </p>
+                    <p className="text-sm text-slate-400 flex items-center gap-2">
+                      <Phone className="h-3 w-3" />
+                      {parcel.senderPhone}
+                    </p>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <h4 className="font-semibold flex items-center gap-2 text-slate-300">
+                    <MapPin className="h-4 w-4 text-cyan-400" />
+                    Recipient
+                  </h4>
+                  <div className="space-y-2 pl-6">
+                    <p className="text-sm text-slate-200">
+                      {parcel.recipientName}
+                    </p>
+                    <p className="text-sm text-slate-400 flex items-center gap-2">
+                      <Phone className="h-3 w-3" />
+                      {parcel.recipientPhone}
+                    </p>
+                    {parcel.recipientEmail && (
+                      <p className="text-sm text-slate-400 flex items-center gap-2">
+                        <Mail className="h-3 w-3" />
+                        {parcel.recipientEmail}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </div>
 
-        {showActions && (
-          <div className="flex gap-2 pt-2">
-            {onTrack && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => onTrack(parcel)}
-              >
-                Track
-              </Button>
-            )}
-            {onUpdateStatus && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => onUpdateStatus(parcel)}
-              >
-                Update Status
-              </Button>
-            )}
-            {showQRCode && (
-              <Dialog open={qrDialogOpen} onOpenChange={setQrDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button variant="outline" size="sm">
-                    <QrCode className="h-4 w-4 mr-1" />
-                    QR Code
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-md">
-                  <DialogHeader>
-                    <DialogTitle>QR Code - {parcel.trackingNumber}</DialogTitle>
-                    <DialogDescription>
-                      Scan to track this parcel
-                    </DialogDescription>
-                  </DialogHeader>
-                  <QRCodeDisplay
-                    trackingNumber={parcel.trackingNumber}
-                    parcelData={{
-                      _id: parcel._id,
-                      senderName: parcel.senderName,
-                      recipientName: parcel.recipientName,
-                      status: parcel.status,
-                    }}
-                    size="md"
-                    showDownload={true}
-                    showShare={true}
-                    className="border-0 shadow-none"
-                  />
-                </DialogContent>
-              </Dialog>
-            )}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-slate-800/30 rounded-lg border border-slate-700/50">
+                <div className="text-sm">
+                  <span className="font-medium text-slate-300">Type:</span>
+                  <span className="text-slate-400 ml-2">
+                    {parcel.parcelType}
+                  </span>
+                </div>
+                <div className="text-sm">
+                  <span className="font-medium text-slate-300">Weight:</span>
+                  <span className="text-slate-400 ml-2">
+                    {parcel.weight} kg
+                  </span>
+                </div>
+                <div className="text-sm">
+                  <span className="font-medium text-slate-300">Payment:</span>
+                  <span className="text-slate-400 ml-2">
+                    {parcel.paymentType.toUpperCase()}
+                    {parcel.paymentType === "cod" &&
+                      parcel.codAmount &&
+                      ` (৳${parcel.codAmount})`}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4 text-sm text-slate-400">
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4 text-slate-500" />
+                  <span>Created: {formatDate(parcel.createdAt)}</span>
+                </div>
+                {parcel.assignedAgent && (
+                  <div className="flex items-center gap-2">
+                    <Truck className="h-4 w-4 text-slate-500" />
+                    <span>Agent: {parcel.agentName}</span>
+                  </div>
+                )}
+              </div>
+
+              {showActions && (
+                <div className="flex flex-wrap gap-3 pt-4 border-t border-slate-800/50">
+                  {onTrack && (
+                    <button
+                      className="inline-flex items-center justify-center rounded-lg font-medium transition-colors duration-200 px-3 py-2 text-sm bg-slate-800/50 text-slate-300 border border-slate-700/50 hover:bg-slate-700/50 hover:text-white"
+                      onClick={() => onTrack(parcel)}
+                    >
+                      Track
+                    </button>
+                  )}
+                  {onUpdateStatus && (
+                    <button
+                      className="inline-flex items-center justify-center rounded-lg font-medium transition-colors duration-200 px-3 py-2 text-sm bg-slate-800/50 text-slate-300 border border-slate-700/50 hover:bg-slate-700/50 hover:text-white"
+                      onClick={() => onUpdateStatus(parcel)}
+                    >
+                      Update Status
+                    </button>
+                  )}
+                  {showQRCode && (
+                    <>
+                      <button
+                        className="inline-flex items-center justify-center rounded-lg font-medium transition-colors duration-200 px-3 py-2 text-sm bg-slate-800/50 text-slate-300 border border-slate-700/50 hover:bg-slate-700/50 hover:text-white"
+                        onClick={() => setQrDialogOpen(true)}
+                      >
+                        <QrCode className="h-4 w-4 mr-2" />
+                        QR Code
+                      </button>
+                      {qrDialogOpen && (
+                        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+                          <div className="relative max-w-md w-full">
+                            <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-600 rounded-xl blur opacity-25"></div>
+                            <div className="relative bg-slate-900/95 backdrop-blur-sm border border-slate-800/50 rounded-xl shadow-2xl p-6">
+                              <button
+                                onClick={() => setQrDialogOpen(false)}
+                                className="absolute top-4 right-4 text-slate-400 hover:text-white text-xl"
+                              >
+                                ×
+                              </button>
+                              <div className="pr-8">
+                                <h3 className="text-lg font-semibold text-white mb-2">
+                                  QR Code - {parcel.trackingNumber}
+                                </h3>
+                                <p className="text-sm text-slate-400 mb-4">
+                                  Scan to track this parcel
+                                </p>
+                                <div className="flex justify-center">
+                                  <QRCodeDisplay
+                                    trackingNumber={parcel.trackingNumber}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
-        )}
-      </CardContent>
-    </Card>
+        </div>
+      </div>
+    </div>
   );
 }

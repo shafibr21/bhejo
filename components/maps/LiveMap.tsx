@@ -8,8 +8,6 @@ import {
   DirectionsRenderer,
   useJsApiLoader,
 } from "@react-google-maps/api";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { MapPin, Navigation, Clock } from "lucide-react";
 import { useSocket } from "@/context/SocketContext";
 
@@ -206,185 +204,139 @@ export function LiveMap({
   // If no API key is provided, show a demo placeholder
   if (!hasApiKey) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <MapPin className="h-5 w-5" />
-            Live Tracking Map (Demo)
-            {trackingNumber && (
-              <span className="text-sm font-normal text-muted-foreground">
-                - {trackingNumber}
-              </span>
-            )}
-          </CardTitle>
-          {showDirections && (
-            <Button variant="outline" size="sm" disabled className="w-fit">
-              <Navigation className="h-4 w-4 mr-2" />
-              Optimize Route (Demo)
-            </Button>
-          )}
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-center h-96 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300">
-            <div className="text-center space-y-4">
-              <MapPin className="h-16 w-16 mx-auto text-gray-400" />
-              <div className="space-y-2">
-                <h3 className="text-lg font-semibold text-gray-600">
-                  Live Map Demo
-                </h3>
-                <p className="text-sm text-gray-500 max-w-md">
-                  This would show real-time tracking of parcels and delivery
-                  agents with Google Maps integration. API key required for live
-                  functionality.
-                </p>
-                <div className="flex flex-wrap gap-2 justify-center pt-2">
-                  <div className="flex items-center gap-1 text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                    {agentLocations.length} Active Agents
-                  </div>
-                  <div className="flex items-center gap-1 text-xs text-green-600 bg-green-50 px-2 py-1 rounded">
-                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                    {parcels.length} Parcels Tracked
-                  </div>
-                  {showDirections && (
-                    <div className="flex items-center gap-1 text-xs text-purple-600 bg-purple-50 px-2 py-1 rounded">
-                      <Navigation className="w-3 h-3" />
-                      Route Optimization
-                    </div>
-                  )}
+      <div className="h-96 bg-slate-800/50 rounded-xl border border-slate-700/50 overflow-hidden">
+        <div className="flex items-center justify-center h-full">
+          <div className="text-center space-y-4">
+            <MapPin className="h-16 w-16 mx-auto text-slate-400" />
+            <div className="space-y-2">
+              <h3 className="text-lg font-semibold text-slate-200">
+                Live Map Demo
+              </h3>
+              <p className="text-sm text-slate-400 max-w-md">
+                This would show real-time tracking of parcels and delivery
+                agents with Google Maps integration. API key required for live
+                functionality.
+              </p>
+              <div className="flex flex-wrap gap-2 justify-center pt-2">
+                <div className="flex items-center gap-1 text-xs text-blue-300 bg-blue-900/30 px-2 py-1 rounded border border-blue-800/50">
+                  <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                  {agentLocations.length} Active Agents
                 </div>
+                <div className="flex items-center gap-1 text-xs text-green-300 bg-green-900/30 px-2 py-1 rounded border border-green-800/50">
+                  <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                  {parcels.length} Parcels Tracked
+                </div>
+                {showDirections && (
+                  <div className="flex items-center gap-1 text-xs text-purple-300 bg-purple-900/30 px-2 py-1 rounded border border-purple-800/50">
+                    <Navigation className="w-3 h-3" />
+                    Route Optimization
+                  </div>
+                )}
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     );
   }
 
   if (!isLoaded) {
     return (
-      <Card>
-        <CardContent className="flex items-center justify-center h-96">
-          <div className="text-center">
-            <MapPin className="h-8 w-8 mx-auto mb-2 text-muted-foreground animate-pulse" />
-            <p>Loading map...</p>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="flex items-center justify-center h-96 bg-slate-800/50 rounded-xl border border-slate-700/50">
+        <div className="text-center">
+          <MapPin className="h-8 w-8 mx-auto mb-2 text-slate-400 animate-pulse" />
+          <p className="text-slate-300">Loading map...</p>
+        </div>
+      </div>
     );
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <MapPin className="h-5 w-5" />
-          Live Tracking Map
-          {trackingNumber && (
-            <span className="text-sm font-normal text-muted-foreground">
-              - {trackingNumber}
-            </span>
-          )}
-        </CardTitle>
-        {showDirections && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={calculateRoute}
-            disabled={isLoading}
-            className="w-fit"
-          >
-            <Navigation className="h-4 w-4 mr-2" />
-            {isLoading ? "Calculating..." : "Optimize Route"}
-          </Button>
-        )}
-      </CardHeader>
-      <CardContent>
-        <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={12}>
-          {/* Agent location markers */}
-          {agentLocations.map((location) => (
+    <div className="h-96 bg-slate-800/50 rounded-xl border border-slate-700/50 overflow-hidden">
+      <GoogleMap mapContainerStyle={containerStyle} center={center} zoom={12}>
+        {/* Agent location markers */}
+        {agentLocations.map((location) => (
+          <Marker
+            key={location.agentId}
+            position={{ lat: location.lat, lng: location.lng }}
+            icon={{
+              url:
+                "data:image/svg+xml;charset=UTF-8," +
+                encodeURIComponent(`
+                <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="16" cy="16" r="12" fill="#3b82f6" stroke="#1e40af" stroke-width="2"/>
+                  <circle cx="16" cy="16" r="4" fill="white"/>
+                </svg>
+              `),
+              scaledSize: new window.google.maps.Size(32, 32),
+            }}
+            onClick={() => setSelectedAgent(location)}
+          />
+        ))}
+
+        {/* Parcel markers */}
+        {parcels.map((parcel) =>
+          parcel.currentLocation ? (
             <Marker
-              key={location.agentId}
-              position={{ lat: location.lat, lng: location.lng }}
+              key={parcel._id}
+              position={{
+                lat: parcel.currentLocation.latitude,
+                lng: parcel.currentLocation.longitude,
+              }}
               icon={{
                 url:
                   "data:image/svg+xml;charset=UTF-8," +
                   encodeURIComponent(`
                   <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="16" cy="16" r="12" fill="#3b82f6" stroke="#1e40af" stroke-width="2"/>
-                    <circle cx="16" cy="16" r="4" fill="white"/>
+                    <rect x="6" y="8" width="20" height="16" rx="2" fill="#10b981" stroke="#059669" stroke-width="2"/>
+                    <rect x="10" y="12" width="12" height="2" fill="white"/>
+                    <rect x="10" y="16" width="8" height="2" fill="white"/>
                   </svg>
                 `),
                 scaledSize: new window.google.maps.Size(32, 32),
               }}
-              onClick={() => setSelectedAgent(location)}
+              title={parcel.trackingNumber}
             />
-          ))}
+          ) : null
+        )}
 
-          {/* Parcel markers */}
-          {parcels.map((parcel) =>
-            parcel.currentLocation ? (
-              <Marker
-                key={parcel._id}
-                position={{
-                  lat: parcel.currentLocation.latitude,
-                  lng: parcel.currentLocation.longitude,
-                }}
-                icon={{
-                  url:
-                    "data:image/svg+xml;charset=UTF-8," +
-                    encodeURIComponent(`
-                    <svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                      <rect x="6" y="8" width="20" height="16" rx="2" fill="#10b981" stroke="#059669" stroke-width="2"/>
-                      <rect x="10" y="12" width="12" height="2" fill="white"/>
-                      <rect x="10" y="16" width="8" height="2" fill="white"/>
-                    </svg>
-                  `),
-                  scaledSize: new window.google.maps.Size(32, 32),
-                }}
-                title={parcel.trackingNumber}
-              />
-            ) : null
-          )}
+        {/* Directions renderer */}
+        {directions && showDirections && (
+          <DirectionsRenderer
+            directions={directions}
+            options={{
+              suppressMarkers: false,
+              polylineOptions: {
+                strokeColor: "#3b82f6",
+                strokeWeight: 4,
+              },
+            }}
+          />
+        )}
 
-          {/* Directions renderer */}
-          {directions && showDirections && (
-            <DirectionsRenderer
-              directions={directions}
-              options={{
-                suppressMarkers: false,
-                polylineOptions: {
-                  strokeColor: "#3b82f6",
-                  strokeWeight: 4,
-                },
-              }}
-            />
-          )}
-
-          {/* Info window for selected agent */}
-          {selectedAgent && (
-            <InfoWindow
-              position={{ lat: selectedAgent.lat, lng: selectedAgent.lng }}
-              onCloseClick={() => setSelectedAgent(null)}
-            >
-              <div className="p-2">
-                <h3 className="font-semibold">
-                  {selectedAgent.agentName || "Agent"}
-                </h3>
-                <p className="text-sm text-gray-600 flex items-center gap-1">
-                  <Clock className="h-3 w-3" />
-                  Updated: {selectedAgent.timestamp.toLocaleTimeString()}
+        {/* Info window for selected agent */}
+        {selectedAgent && (
+          <InfoWindow
+            position={{ lat: selectedAgent.lat, lng: selectedAgent.lng }}
+            onCloseClick={() => setSelectedAgent(null)}
+          >
+            <div className="p-2 bg-slate-800 text-white rounded-lg border border-slate-700">
+              <h3 className="font-semibold text-slate-100">
+                {selectedAgent.agentName || "Agent"}
+              </h3>
+              <p className="text-sm text-slate-300 flex items-center gap-1">
+                <Clock className="h-3 w-3" />
+                Updated: {selectedAgent.timestamp.toLocaleTimeString()}
+              </p>
+              {selectedAgent.parcelId && (
+                <p className="text-sm text-blue-300">
+                  Handling parcel: {selectedAgent.parcelId}
                 </p>
-                {selectedAgent.parcelId && (
-                  <p className="text-sm text-blue-600">
-                    Handling parcel: {selectedAgent.parcelId}
-                  </p>
-                )}
-              </div>
-            </InfoWindow>
-          )}
-        </GoogleMap>
-      </CardContent>
-    </Card>
+              )}
+            </div>
+          </InfoWindow>
+        )}
+      </GoogleMap>
+    </div>
   );
 }

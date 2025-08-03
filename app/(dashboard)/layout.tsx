@@ -10,9 +10,7 @@ import {
   Package,
   LayoutDashboard,
   Users,
-  FileText,
   MapPin,
-  Route,
   History,
   LogOut,
   Menu,
@@ -37,8 +35,12 @@ export default function DashboardLayout({
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800">
+        <div className="relative">
+          <div className="w-16 h-16 border-4 border-blue-500/30 border-t-blue-500 rounded-full animate-spin"></div>
+          <div className="absolute inset-0 w-16 h-16 border-4 border-transparent border-t-purple-500 rounded-full animate-spin" style={{animationDelay: "150ms"}}></div>
+          <div className="absolute inset-2 w-12 h-12 border-4 border-blue-400/20 border-t-blue-400 rounded-full animate-spin" style={{animationDelay: "300ms"}}></div>
+        </div>
       </div>
     );
   }
@@ -58,12 +60,10 @@ export default function DashboardLayout({
           },
           { href: "/admin/parcels", label: "Parcels", icon: Package },
           { href: "/admin/users", label: "Users", icon: Users },
-          { href: "/admin/reports", label: "Reports", icon: FileText },
         ];
       case "agent":
         return [
           { href: "/agent/parcels", label: "My Parcels", icon: Package },
-          { href: "/agent/route", label: "Route", icon: Route },
         ];
       case "customer":
         return [
@@ -80,7 +80,14 @@ export default function DashboardLayout({
   const navItems = getNavItems();
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 flex">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: "1000ms"}}></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: "500ms"}}></div>
+      </div> 
+      
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div
@@ -92,22 +99,22 @@ export default function DashboardLayout({
       {/* Sidebar */}
       <div
         className={`
-        fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out
+        fixed inset-y-0 left-0 z-50 w-64 bg-slate-900/95 backdrop-blur-xl border-r border-slate-700/50 shadow-xl transform transition-transform duration-300 ease-in-out
         ${sidebarOpen ? "translate-x-0" : "-translate-x-full"}
         lg:translate-x-0 lg:static lg:inset-0
       `}
       >
-        <div className="flex items-center justify-between h-16 px-6 border-b">
+        <div className="flex items-center justify-between h-16 px-6 border-b border-slate-700/50">
           <div className="flex items-center">
-            <Package className="h-8 w-8 text-blue-600" />
-            <span className="ml-2 text-xl font-bold text-gray-900">
+            <Package className="h-8 w-8 text-blue-400" />
+            <span className="ml-2 text-xl font-bold text-white">
               CourierPro
             </span>
           </div>
           <Button
             variant="ghost"
             size="icon"
-            className="lg:hidden"
+            className="lg:hidden text-slate-400 hover:text-white hover:bg-slate-800"
             onClick={() => setSidebarOpen(false)}
           >
             <X className="h-4 w-4" />
@@ -117,9 +124,9 @@ export default function DashboardLayout({
         <div className="flex flex-col">
           <div className="flex-1 px-4 py-6">
             <div className="mb-6">
-              <p className="text-sm text-gray-500">Welcome back,</p>
-              <p className="font-semibold text-gray-900">{user.name}</p>
-              <p className="text-xs text-gray-500 capitalize">{user.role}</p>
+              <p className="text-sm text-slate-400">Welcome back,</p>
+              <p className="font-semibold text-white">{user.name}</p>
+              <p className="text-xs text-slate-400 capitalize">{user.role}</p>
             </div>
 
             <nav className="space-y-2">
@@ -127,20 +134,20 @@ export default function DashboardLayout({
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="flex items-center px-3 py-2 text-sm font-medium text-gray-700 rounded-md hover:bg-gray-100 hover:text-gray-900 transition-colors"
+                  className="flex items-center px-3 py-2 text-sm font-medium text-slate-300 rounded-lg hover:bg-slate-800/50 hover:text-white transition-all duration-200 group"
                   onClick={() => setSidebarOpen(false)}
                 >
-                  <item.icon className="mr-3 h-4 w-4" />
+                  <item.icon className="mr-3 h-4 w-4 text-slate-400 group-hover:text-blue-400 transition-colors" />
                   {item.label}
                 </Link>
               ))}
             </nav>
           </div>
 
-          <div className="p-4 border-t">
+          <div className="p-4 border-t border-slate-700/50">
             <Button
               variant="ghost"
-              className="w-full justify-start text-red-600 hover:text-red-700 hover:bg-red-50"
+              className="w-full justify-start text-red-400 hover:text-red-300 hover:bg-red-900/20 transition-all duration-200"
               onClick={logout}
             >
               <LogOut className="mr-3 h-4 w-4" />
@@ -151,20 +158,20 @@ export default function DashboardLayout({
       </div>
 
       {/* Main content */}
-      <div className="">
+      <div className="flex-1">
         {/* Top bar */}
-        <div>
+        <div className="bg-slate-800/30 backdrop-blur-sm border-b border-slate-700/50">
           <div className="flex items-center justify-between h-16 px-6">
             <Button
               variant="ghost"
               size="icon"
-              className="lg:hidden"
+              className="lg:hidden text-slate-400 hover:text-white hover:bg-slate-800"
               onClick={() => setSidebarOpen(true)}
             >
               <Menu className="h-4 w-4" />
             </Button>
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-slate-400">
                 {new Date().toLocaleDateString("en-US", {
                   weekday: "long",
                   year: "numeric",
@@ -177,7 +184,7 @@ export default function DashboardLayout({
         </div>
 
         {/* Page content */}
-        <main className="p-6 ">{children}</main>
+        <main className="p-5">{children}</main>
       </div>
     </div>
   );
