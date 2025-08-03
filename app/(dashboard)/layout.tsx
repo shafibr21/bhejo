@@ -1,73 +1,92 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useAuth } from "@/context/AuthContext"
-import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Package, LayoutDashboard, Users, FileText, MapPin, Route, History, LogOut, Menu, X } from "lucide-react"
-import Link from "next/link"
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Package,
+  LayoutDashboard,
+  Users,
+  FileText,
+  MapPin,
+  Route,
+  History,
+  LogOut,
+  Menu,
+  X,
+} from "lucide-react";
+import Link from "next/link";
 
 export default function DashboardLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  const { user, logout, loading } = useAuth()
-  const router = useRouter()
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const { user, logout, loading } = useAuth();
+  const router = useRouter();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push("/login")
+      router.push("/login");
     }
-  }, [user, loading, router])
+  }, [user, loading, router]);
 
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
-    )
+    );
   }
 
   if (!user) {
-    return null
+    return null;
   }
 
   const getNavItems = () => {
     switch (user.role) {
       case "admin":
         return [
-          { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
+          {
+            href: "/admin/dashboard",
+            label: "Dashboard",
+            icon: LayoutDashboard,
+          },
           { href: "/admin/parcels", label: "Parcels", icon: Package },
           { href: "/admin/users", label: "Users", icon: Users },
           { href: "/admin/reports", label: "Reports", icon: FileText },
-        ]
+        ];
       case "agent":
         return [
           { href: "/agent/parcels", label: "My Parcels", icon: Package },
           { href: "/agent/route", label: "Route", icon: Route },
-        ]
+        ];
       case "customer":
         return [
           { href: "/customer/book", label: "Book Parcel", icon: Package },
           { href: "/customer/tracking", label: "Track Parcel", icon: MapPin },
           { href: "/customer/history", label: "History", icon: History },
-        ]
+          { href: "/customer/qrcode", label: "QR Codes", icon: Package },
+        ];
       default:
-        return []
+        return [];
     }
-  }
+  };
 
-  const navItems = getNavItems()
+  const navItems = getNavItems();
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
       )}
 
       {/* Sidebar */}
@@ -81,9 +100,16 @@ export default function DashboardLayout({
         <div className="flex items-center justify-between h-16 px-6 border-b">
           <div className="flex items-center">
             <Package className="h-8 w-8 text-blue-600" />
-            <span className="ml-2 text-xl font-bold text-gray-900">CourierPro</span>
+            <span className="ml-2 text-xl font-bold text-gray-900">
+              CourierPro
+            </span>
           </div>
-          <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setSidebarOpen(false)}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="lg:hidden"
+            onClick={() => setSidebarOpen(false)}
+          >
             <X className="h-4 w-4" />
           </Button>
         </div>
@@ -129,7 +155,12 @@ export default function DashboardLayout({
         {/* Top bar */}
         <div>
           <div className="flex items-center justify-between h-16 px-6">
-            <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setSidebarOpen(true)}>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="lg:hidden"
+              onClick={() => setSidebarOpen(true)}
+            >
               <Menu className="h-4 w-4" />
             </Button>
             <div className="flex items-center space-x-4">
@@ -149,5 +180,5 @@ export default function DashboardLayout({
         <main className="p-6 ">{children}</main>
       </div>
     </div>
-  )
+  );
 }

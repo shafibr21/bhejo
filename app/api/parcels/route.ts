@@ -1,6 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { getDatabase } from "@/lib/mongodb";
+import { ObjectId } from "mongodb";
 import { authenticateRequest } from "@/lib/authenticate";
+import { getSocketService } from "@/services/socketService";
 
 export async function GET(request: NextRequest) {
   try {
@@ -103,9 +105,22 @@ export async function POST(request: NextRequest) {
     };
 
     const result = await db.collection("parcels").insertOne(newParcel as any);
+    const createdParcel = { ...newParcel, _id: result.insertedId };
+
+    // Emit real-time event to admin dashboard
+    const socketService = getSocketService();
+    if (socketService) {
+      socketService.emitParcelUpdate({
+        parcelId: result.insertedId.toString(),
+        status: "pending",
+        timestamp: new Date(),
+        parcel: createdParcel,
+        customerId: auth.user.userId,
+      });
+    }
 
     return NextResponse.json({
-      parcel: { ...newParcel, _id: result.insertedId },
+      parcel: createdParcel,
     });
   } catch (error) {
     console.error("Create parcel error:", error);

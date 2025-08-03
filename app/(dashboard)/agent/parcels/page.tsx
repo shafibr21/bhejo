@@ -7,10 +7,13 @@ import { ParcelStats } from "@/components/agent/ParcelStats";
 import { StatusUpdateModal } from "@/components/agent/StatusUpdateModal";
 import { DeliveryRoute } from "@/components/agent/DeliveryRoute";
 import { AgentParcelGrid } from "@/components/agent/AgentParcelGrid";
+import { ConnectionStatus } from "@/components/ui/ConnectionStatus";
 import { useParcels } from "@/hooks/useParcels";
+import { useRealtimeParcels } from "@/hooks/useRealtimeParcels";
 
 export default function AgentParcels() {
-  const { parcels, loading, error, refetch } = useParcels();
+  const { parcels: initialParcels, loading, error, refetch } = useParcels();
+  const { parcels, isConnected } = useRealtimeParcels(initialParcels);
   const [selectedParcel, setSelectedParcel] = useState(null);
 
   const handleUpdateStatus = async (parcel: any) => {
@@ -39,10 +42,13 @@ export default function AgentParcels() {
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        title="My Parcels"
-        description="Manage your assigned parcels and update delivery status"
-      />
+      <div className="flex items-center justify-between">
+        <PageHeader
+          title="My Parcels"
+          description="Manage your assigned parcels and update delivery status"
+        />
+        <ConnectionStatus />
+      </div>
 
       {/* Stats */}
       <ParcelStats parcels={parcels} />

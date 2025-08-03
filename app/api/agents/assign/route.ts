@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { getDatabase } from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
 import { authenticateRequest } from "@/lib/authenticate";
+import { getSocketService } from "@/services/socketService";
 
 export async function POST(request: NextRequest) {
   try {
@@ -55,7 +56,29 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Parcel not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ success: true });
+    // Get updated parcel data for socket emission
+    const updatedParcel = await db
+      .collection("parcels")
+      .findOne({ _id: new ObjectId(parcelId) });
+
+    // Emit real-time updates via Socket.IO
+    const socketService = getSocketService();
+    if (socketService && updatedParcel) {
+      // Emit to the assigned agent
+      socketService.emitParcelAssignment(parcelId, agentId, updatedParcel);
+
+      // Emit general parcel update
+      socketService.emitParcelUpdate({
+        parcelId,
+        status: "assigned",
+        timestamp: new Date(),
+        parcel: updatedParcel,
+        agentId,
+        customerId: updatedParcel.senderId,
+      });
+    }
+
+    return NextResponse.json({ success: true, parcel: updatedParcel });
   } catch (error) {
     console.error("Assign agent error:", error);
     return NextResponse.json(

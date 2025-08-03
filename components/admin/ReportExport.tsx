@@ -14,6 +14,10 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Download, FileText, Calendar, Filter } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+
+// No need for module declaration, just use autoTable directly
 
 interface ReportExportProps {
   parcels: any[];
@@ -40,7 +44,6 @@ export function ReportExport({ parcels, users }: ReportExportProps) {
     { value: "30", label: "Last 30 days" },
     { value: "90", label: "Last 3 months" },
     { value: "365", label: "Last year" },
-    { value: "custom", label: "Custom range" },
   ];
 
   const generateReport = async () => {
@@ -150,12 +153,71 @@ export function ReportExport({ parcels, users }: ReportExportProps) {
   };
 
   const downloadPDF = (data: any[]) => {
-    // This is a simplified version. In a real app, you'd use a library like jsPDF
-    toast({
-      title: "PDF Export",
-      description:
-        "PDF export feature would be implemented with a proper PDF library",
-    });
+    if (data.length === 0) {
+      toast({
+        title: "No Data",
+        description: "No data available for the selected criteria",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const doc = new jsPDF();
+
+      // Add title
+      doc.setFontSize(16);
+      doc.text(
+        `${reportTypes.find((r) => r.value === reportType)?.label || "Report"}`,
+        14,
+        20
+      );
+
+      // Add date range
+      doc.setFontSize(10);
+      doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 30);
+      doc.text(
+        `Date Range: ${dateRanges.find((r) => r.value === dateRange)?.label}`,
+        14,
+        36
+      );
+
+      const headers = Object.keys(data[0]);
+      const rows = data.map((row) =>
+        headers.map((header) => String(row[header] || ""))
+      );
+
+      autoTable(doc, {
+        head: [headers],
+        body: rows,
+        startY: 45,
+        styles: {
+          fontSize: 8,
+          cellPadding: 2,
+        },
+        headStyles: {
+          fillColor: [41, 128, 185],
+          textColor: 255,
+          fontStyle: "bold",
+        },
+        alternateRowStyles: {
+          fillColor: [245, 245, 245],
+        },
+        margin: { top: 45 },
+      });
+
+      const filename = `${reportType}_report_${
+        new Date().toISOString().split("T")[0]
+      }.pdf`;
+      doc.save(filename);
+    } catch (error) {
+      console.error("PDF generation error:", error);
+      toast({
+        title: "PDF Generation Failed",
+        description: "There was an error generating the PDF. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const getReportStats = () => {

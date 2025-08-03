@@ -1,11 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSocket } from "@/context/SocketContext";
+import { useAuth } from "@/context/AuthContext";
 
 export function useParcels() {
-  const [parcels, setParcels] = useState([]);
+  const [parcels, setParcels] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { socket } = useSocket();
+  const { user } = useAuth();
 
   const fetchParcels = async () => {
     try {
@@ -36,6 +40,44 @@ export function useParcels() {
   useEffect(() => {
     fetchParcels();
   }, []);
+
+  // Join user room and listen for real-time updates
+  useEffect(() => {
+    if (socket && user) {
+      socket.emit("join-user", user._id);
+
+      const handleParcelUpdate = (data: any) => {
+        // Update parcels when user's parcels change
+        if (data.customerId === user._id) {
+          setParcels((prev) => {
+            const existingIndex = prev.findIndex(
+              (p: any) => p._id === data.parcelId
+            );
+            if (existingIndex !== -1) {
+              // Update existing parcel
+              const updated = [...prev];
+              updated[existingIndex] = {
+                ...updated[existingIndex],
+                ...data.parcel,
+              };
+              return updated;
+            } else {
+              // Add new parcel if it belongs to this user
+              return [data.parcel, ...prev];
+            }
+          });
+        }
+      };
+
+      socket.on("parcel-update", handleParcelUpdate);
+      socket.on("parcel-status-updated", handleParcelUpdate);
+
+      return () => {
+        socket.off("parcel-update", handleParcelUpdate);
+        socket.off("parcel-status-updated", handleParcelUpdate);
+      };
+    }
+  }, [socket, user]);
 
   const refetch = () => {
     fetchParcels();
