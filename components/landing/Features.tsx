@@ -67,7 +67,7 @@ export default function Features() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 sm:mb-20">
           <h2 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-white via-blue-100 to-cyan-200 bg-clip-text text-transparent mb-4 sm:mb-6 px-2 sm:px-0">
-            Why Choose Bhejo?
+            Why Choose CourirerPro?
           </h2>
           <p className="text-lg sm:text-xl text-slate-400 px-2 sm:px-0">
             Everything you need to manage your courier operations efficiently

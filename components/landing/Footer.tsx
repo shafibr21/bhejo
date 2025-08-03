@@ -34,7 +34,7 @@ export default function Footer() {
                 </div>
               </div>
               <span className="ml-3 text-xl font-bold bg-gradient-to-r from-white via-blue-100 to-cyan-200 bg-clip-text text-transparent">
-                Bhejo
+                CourierPro
               </span>
             </div>
             <p className="text-slate-400 leading-relaxed text-sm sm:text-base">
@@ -62,7 +62,7 @@ export default function Footer() {
         </div>
         <div className="border-t border-slate-700/50 mt-8 sm:mt-12 pt-6 sm:pt-8 text-center text-slate-400">
           <p className="text-sm sm:text-base">
-            &copy; 2025 Bhejo. All rights reserved.
+            &copy; 2025 CourierPro. All rights reserved.
           </p>
         </div>
       </div>
