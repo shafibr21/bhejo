@@ -101,7 +101,7 @@ export function ManagementSection({
     <div className="space-y-6">
       {/* Real-time Status Bar */}
       <Card>
-        <CardContent className="pt-6">
+        <CardContent className="">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">

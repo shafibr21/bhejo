@@ -1,17 +1,29 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Textarea } from "@/components/ui/textarea"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Package, MapPin, User, CreditCard } from "lucide-react"
-import { useToast } from "@/hooks/use-toast"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Package, MapPin, User, CreditCard } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface BookParcelFormProps {
   onSuccess?: (parcel: any) => void;
@@ -24,6 +36,7 @@ export function BookParcelForm({ onSuccess }: BookParcelFormProps) {
     senderAddress: "",
     recipientName: "",
     recipientPhone: "",
+    recipientEmail: "",
     recipientAddress: "",
     parcelType: "",
     weight: "",
@@ -81,6 +94,7 @@ export function BookParcelForm({ onSuccess }: BookParcelFormProps) {
           senderAddress: "",
           recipientName: "",
           recipientPhone: "",
+          recipientEmail: "",
           recipientAddress: "",
           parcelType: "",
           weight: "",
@@ -207,6 +221,19 @@ export function BookParcelForm({ onSuccess }: BookParcelFormProps) {
                   required
                 />
               </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="recipientEmail">Email Address</Label>
+              <Input
+                id="recipientEmail"
+                type="email"
+                value={formData.recipientEmail}
+                onChange={(e) =>
+                  handleInputChange("recipientEmail", e.target.value)
+                }
+                placeholder="recipient@example.com"
+                required
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="recipientAddress">Delivery Address</Label>
@@ -341,11 +368,7 @@ export function BookParcelForm({ onSuccess }: BookParcelFormProps) {
             </div>
           </div>
 
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={loading}
-          >
+          <Button type="submit" className="w-full" disabled={loading}>
             {loading ? "Booking Parcel..." : "Book Parcel"}
           </Button>
         </form>

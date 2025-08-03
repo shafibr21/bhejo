@@ -4,46 +4,28 @@ import { useState, useEffect } from "react";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import { ParcelStats } from "@/components/agent/ParcelStats";
-import { StatusUpdateModal } from "@/components/agent/StatusUpdateModal";
 import { DeliveryRoute } from "@/components/agent/DeliveryRoute";
 import { LocationSharing } from "@/components/agent/LocationSharing";
-import { AgentParcelGrid } from "@/components/agent/AgentParcelGrid";
-import { ConnectionStatus } from "@/components/ui/ConnectionStatus";
 import { useParcels } from "@/hooks/useParcels";
-import { useRealtimeParcels } from "@/hooks/useRealtimeParcels";
 import { useAuth } from "@/hooks/useAuth";
 import { useGeolocation } from "@/hooks/useGeolocation";
 
-export default function AgentParcels() {
+export default function AgentDashboard() {
   const { user } = useAuth();
-  const { parcels: initialParcels, loading, error, refetch } = useParcels();
-  const { parcels, isConnected } = useRealtimeParcels(initialParcels);
+  const { parcels: initialParcels, loading, error } = useParcels();
   const { location } = useGeolocation();
-  const [selectedParcel, setSelectedParcel] = useState(null);
   const [assignedParcels, setAssignedParcels] = useState<any[]>([]);
 
   // Filter parcels assigned to this agent
   useEffect(() => {
-    if (parcels && user) {
+    if (initialParcels && user) {
       const userId = (user as any)?._id || (user as any)?.userId;
-      const filtered = parcels.filter(
+      const filtered = initialParcels.filter(
         (parcel) => parcel.assignedAgent === userId
       );
       setAssignedParcels(filtered);
     }
-  }, [parcels, user]);
-
-  const handleUpdateStatus = async (parcel: any) => {
-    setSelectedParcel(parcel);
-  };
-
-  const handleModalClose = () => {
-    setSelectedParcel(null);
-  };
-
-  const handleUpdateComplete = () => {
-    refetch();
-  };
+  }, [initialParcels, user]);
 
   if (loading) {
     return <LoadingSpinner />;
@@ -59,13 +41,10 @@ export default function AgentParcels() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <PageHeader
-          title="My Parcels"
-          description="Manage your assigned parcels and update delivery status"
-        />
-        <ConnectionStatus />
-      </div>
+      <PageHeader
+        title="Agent Dashboard"
+        description="Manage your deliveries, route optimization, and location sharing"
+      />
 
       {/* Stats */}
       <ParcelStats parcels={assignedParcels} />
@@ -85,22 +64,6 @@ export default function AgentParcels() {
               }
             : undefined
         }
-      />
-
-      {/* Parcels List */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <AgentParcelGrid
-          parcels={assignedParcels}
-          onUpdateStatus={handleUpdateStatus}
-        />
-      </div>
-
-      {/* Status Update Modal */}
-      <StatusUpdateModal
-        parcel={selectedParcel}
-        isOpen={!!selectedParcel}
-        onClose={handleModalClose}
-        onUpdate={handleUpdateComplete}
       />
     </div>
   );

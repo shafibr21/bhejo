@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Users, User, Mail, Phone, MapPin } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function AdminUsers() {
   const [users, setUsers] = useState([]);
@@ -27,7 +27,7 @@ export default function AdminUsers() {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem("token");
-      
+
       if (!token) {
         setLoading(false);
         return;

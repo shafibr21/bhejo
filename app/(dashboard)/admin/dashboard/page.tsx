@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useSocket } from "@/context/SocketContext";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import { useAdminDashboard } from "@/hooks/useAdminDashboard";
 import { AdminDashboardStats } from "@/components/admin/AdminDashboardStats";
 import { DashboardHeader } from "@/components/admin/DashboardHeader";
@@ -13,6 +13,7 @@ import { DashboardCharts } from "@/components/admin/DashboardCharts";
 import { RecentParcels } from "@/components/admin/RecentParcels";
 import { LiveNotifications } from "@/components/admin/LiveNotifications";
 import { QRCodeGenerator } from "@/components/admin/QRCodeGenerator";
+import { LiveMap } from "@/components/maps/LiveMap";
 
 export default function AdminDashboard() {
   const { socket } = useSocket();
@@ -59,6 +60,21 @@ export default function AdminDashboard() {
       </div>
 
       <DashboardCharts statusStats={analytics.statusStats} />
+
+      {/* Agent Location Map */}
+      <div className="space-y-4">
+        <h2 className="text-xl font-semibold">Live Agent Tracking</h2>
+        <LiveMap
+          parcels={parcels.map((p: any) => ({
+            _id: p._id,
+            trackingNumber: p.trackingNumber,
+            senderAddress: p.senderAddress,
+            recipientAddress: p.recipientAddress,
+            currentLocation: p.currentLocation,
+          }))}
+          showDirections={false}
+        />
+      </div>
 
       <RecentParcels recentParcels={analytics.recentParcels} />
     </div>

@@ -63,32 +63,30 @@ export function DashboardCharts({ statusStats }: DashboardChartsProps) {
                 color: "hsl(var(--chart-1))",
               },
             }}
-            className="h-[300px]"
+            className="aspect-square max-h-[300px]"
           >
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={statusChartData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={({ name, percent }) =>
-                    `${name} ${((percent || 0) * 100).toFixed(0)}%`
-                  }
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {statusChartData.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-                <ChartTooltip content={<ChartTooltipContent />} />
-              </PieChart>
-            </ResponsiveContainer>
+            <PieChart>
+              <Pie
+                data={statusChartData}
+                cx="50%"
+                cy="50%"
+                labelLine={false}
+                label={({ name, percent }) =>
+                  `${name} ${((percent || 0) * 100).toFixed(0)}%`
+                }
+                outerRadius={80}
+                fill="#8884d8"
+                dataKey="value"
+              >
+                {statusChartData.map((entry, index) => (
+                  <Cell
+                    key={`cell-${index}`}
+                    fill={COLORS[index % COLORS.length]}
+                  />
+                ))}
+              </Pie>
+              <ChartTooltip content={<ChartTooltipContent />} />
+            </PieChart>
           </ChartContainer>
         </CardContent>
       </Card>
@@ -106,17 +104,15 @@ export function DashboardCharts({ statusStats }: DashboardChartsProps) {
                 color: "hsl(var(--chart-1))",
               },
             }}
-            className="h-[300px]"
+            className="min-h-[300px]"
           >
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={statusChartData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <Bar dataKey="value" fill="var(--color-count)" />
-              </BarChart>
-            </ResponsiveContainer>
+            <BarChart data={statusChartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <Bar dataKey="value" fill="var(--color-count)" />
+            </BarChart>
           </ChartContainer>
         </CardContent>
       </Card>

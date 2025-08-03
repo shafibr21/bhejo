@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
-import { useAuth } from "./AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 
 interface SocketContextType {
   socket: Socket | null;
@@ -28,42 +28,42 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
 
   useEffect(() => {
-    if (user) {
-      // Initialize socket connection
-      const socketInstance = io({
-        transports: ["websocket", "polling"],
-      });
+    if (!user) return;
 
-      socketInstance.on("connect", () => {
-        console.log("Connected to Socket.IO server:", socketInstance.id);
-        setIsConnected(true);
+    // Initialize socket connection
+    const socketInstance = io({
+      transports: ["websocket", "polling"],
+    });
 
-        // Automatically join user room based on role
-        if (user._id) {
-          socketInstance.emit("join-user", user._id);
+    socketInstance.on("connect", () => {
+      console.log("Connected to Socket.IO server:", socketInstance.id);
+      setIsConnected(true);
 
-          if (user.role === "agent") {
-            socketInstance.emit("join-agent", user._id);
-          }
+      // Automatically join user room based on role
+      if (user._id) {
+        socketInstance.emit("join-user", user._id);
+
+        if (user.role === "agent") {
+          socketInstance.emit("join-agent", user._id);
         }
-      });
+      }
+    });
 
-      socketInstance.on("disconnect", (reason) => {
-        console.log("Disconnected from Socket.IO server:", reason);
-        setIsConnected(false);
-      });
+    socketInstance.on("disconnect", (reason) => {
+      console.log("Disconnected from Socket.IO server:", reason);
+      setIsConnected(false);
+    });
 
-      socketInstance.on("connect_error", (error) => {
-        console.error("Socket.IO connection error:", error);
-      });
+    socketInstance.on("connect_error", (error) => {
+      console.error("Socket.IO connection error:", error);
+    });
 
-      setSocket(socketInstance);
+    setSocket(socketInstance);
 
-      return () => {
-        console.log("Cleaning up socket connection");
-        socketInstance.disconnect();
-      };
-    }
+    return () => {
+      console.log("Cleaning up socket connection");
+      socketInstance.disconnect();
+    };
   }, [user]);
 
   const joinParcelRoom = (parcelId: string) => {

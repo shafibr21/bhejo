@@ -3,6 +3,7 @@ import { getDatabase } from "@/lib/mongodb";
 import { ObjectId } from "mongodb";
 import { authenticateRequest } from "@/lib/authenticate";
 import { getSocketService } from "@/services/socketService";
+import { NotificationService } from "@/services/notificationService";
 
 export async function POST(request: NextRequest) {
   try {
@@ -69,6 +70,66 @@ export async function POST(request: NextRequest) {
         agentId: updatedParcel.assignedAgent,
         customerId: updatedParcel.senderId,
       });
+    }
+
+    // Send email notification if recipientEmail exists
+    if (updatedParcel && updatedParcel.recipientEmail) {
+      console.log(
+        `Attempting to send email notification for parcel ${updatedParcel.trackingNumber} to ${updatedParcel.recipientEmail}`
+      );
+      try {
+        // Get agent information if assigned
+        let agent = null;
+        if (updatedParcel.assignedAgent) {
+          agent = await db.collection("users").findOne({
+            _id: new ObjectId(updatedParcel.assignedAgent),
+            role: "agent",
+          });
+        }
+
+        // Determine notification type based on status
+        let notificationType:
+          | "status_update"
+          | "pickup_confirmation"
+          | "delivery_confirmation" = "status_update";
+        if (status === "picked_up") {
+          notificationType = "pickup_confirmation";
+        } else if (status === "delivered") {
+          notificationType = "delivery_confirmation";
+        }
+
+        // Prepare notification data
+        const notificationData = {
+          trackingNumber: updatedParcel.trackingNumber,
+          recipientName: updatedParcel.recipientName,
+          recipientEmail: updatedParcel.recipientEmail,
+          recipientPhone: updatedParcel.recipientPhone,
+          senderName: updatedParcel.senderName,
+          status: status,
+          estimatedDelivery: updatedParcel.estimatedDelivery
+            ? new Date(updatedParcel.estimatedDelivery).toLocaleDateString()
+            : undefined,
+          currentLocation: location?.address,
+          agentName: agent?.name,
+          agentPhone: agent?.phone,
+        };
+
+        // Send notification
+        await NotificationService.sendEmail(notificationData, notificationType);
+
+        console.log(
+          `Email notification sent for parcel ${updatedParcel.trackingNumber} status: ${status}`
+        );
+      } catch (emailError) {
+        console.error("Failed to send email notification:", emailError);
+        // Don't fail the status update if email fails
+      }
+    } else {
+      console.log(
+        `Skipping email notification - parcel: ${!!updatedParcel}, recipientEmail: ${
+          updatedParcel?.recipientEmail || "undefined"
+        }`
+      );
     }
 
     return NextResponse.json({ success: true, parcel: updatedParcel });

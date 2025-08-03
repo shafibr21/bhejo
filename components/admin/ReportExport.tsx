@@ -271,7 +271,7 @@ export function ReportExport({ parcels, users }: ReportExportProps) {
         </div>
 
         {/* Report Configuration */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1  gap-4">
           <div className="space-y-2">
             <label className="text-sm font-medium">Report Type</label>
             <Select value={reportType} onValueChange={setReportType}>

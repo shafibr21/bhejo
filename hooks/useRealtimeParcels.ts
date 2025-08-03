@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSocket } from "@/context/SocketContext";
 import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 
 export interface RealtimeParcel {
   _id: string;

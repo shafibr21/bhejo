@@ -17,6 +17,7 @@ import {
   MapPin,
   User,
   Phone,
+  Mail,
   Calendar,
   Truck,
   QrCode,
@@ -90,6 +91,12 @@ export function ParcelCard({
               <Phone className="h-3 w-3" />
               {parcel.recipientPhone}
             </p>
+            {parcel.recipientEmail && (
+              <p className="text-sm text-gray-500 flex items-center gap-1">
+                <Mail className="h-3 w-3" />
+                {parcel.recipientEmail}
+              </p>
+            )}
           </div>
         </div>
 

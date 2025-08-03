@@ -26,8 +26,9 @@ import {
 import { STATUS_LABELS, STATUS_COLORS } from "@/constants/parcelStatus";
 import { useRealtimeParcelTracking } from "@/hooks/useRealtimeParcels";
 import { ConnectionStatus } from "@/components/ui/ConnectionStatus";
+import { LiveMap } from "@/components/maps/LiveMap";
 import { useSocket } from "@/context/SocketContext";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function TrackingPage() {
   const [trackingNumber, setTrackingNumber] = useState("");
@@ -202,6 +203,11 @@ export default function TrackingPage() {
                   <p className="text-sm text-gray-500">
                     {(parcel as any).recipientPhone}
                   </p>
+                  {(parcel as any).recipientEmail && (
+                    <p className="text-sm text-gray-500">
+                      {(parcel as any).recipientEmail}
+                    </p>
+                  )}
                 </div>
               </div>
             </CardContent>
@@ -255,22 +261,39 @@ export default function TrackingPage() {
             </CardContent>
           </Card>
 
-          {/* Current Location */}
+          {/* Current Location & Live Map */}
           {(parcel as any).currentLocation && (
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <MapPin className="h-5 w-5" />
-                  Current Location
+                  Live Tracking
                 </CardTitle>
+                <CardDescription>
+                  Real-time location of your parcel
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-sm">
-                  {(parcel as any).currentLocation.address}
-                </p>
-                <div className="mt-4 h-64 bg-gray-100 rounded-lg flex items-center justify-center">
-                  <p className="text-gray-500">Map integration would go here</p>
-                </div>
+                <LiveMap
+                  parcels={[
+                    {
+                      _id: (parcel as any)._id,
+                      trackingNumber: (parcel as any).trackingNumber,
+                      senderAddress: (parcel as any).senderAddress,
+                      recipientAddress: (parcel as any).recipientAddress,
+                      currentLocation: (parcel as any).currentLocation,
+                    },
+                  ]}
+                  showDirections={true}
+                  center={
+                    (parcel as any).currentLocation
+                      ? {
+                          lat: (parcel as any).currentLocation.latitude,
+                          lng: (parcel as any).currentLocation.longitude,
+                        }
+                      : undefined
+                  }
+                />
               </CardContent>
             </Card>
           )}

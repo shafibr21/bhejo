@@ -57,6 +57,24 @@ app.prepare().then(() => {
       console.log(`Socket ${socket.id} left parcel room: parcel-${parcelId}`);
     });
 
+    // Handle agent location updates
+    socket.on("agent-location-update", (data) => {
+      console.log(`Agent location update from ${data.agentId}:`, data);
+
+      // Broadcast to admin rooms
+      socket.to("user-admin").emit("agent-location-update", data);
+
+      // If parcelId is provided, broadcast to that parcel's room
+      if (data.parcelId) {
+        socket
+          .to(`parcel-${data.parcelId}`)
+          .emit("agent-location-update", data);
+      }
+
+      // Broadcast to the agent's own room for multiple devices
+      socket.to(`agent-${data.agentId}`).emit("agent-location-update", data);
+    });
+
     socket.on("disconnect", (reason) => {
       console.log(`Client disconnected: ${socket.id}, reason: ${reason}`);
     });
