@@ -5,7 +5,8 @@ const features = [
   {
     icon: MapPin,
     title: "Real-time Tracking",
-    description: "Track your parcels in real-time with GPS integration and live updates",
+    description:
+      "Track your parcels in real-time with GPS integration and live updates",
     gradientFrom: "from-blue-600/20",
     gradientTo: "to-purple-600/20",
     iconColor: "text-blue-400",
@@ -14,7 +15,8 @@ const features = [
   {
     icon: Truck,
     title: "Optimized Routes",
-    description: "AI-powered route optimization for faster deliveries and reduced costs",
+    description:
+      "AI-powered route optimization for faster deliveries and reduced costs",
     gradientFrom: "from-purple-600/20",
     gradientTo: "to-cyan-600/20",
     iconColor: "text-purple-400",
@@ -41,7 +43,8 @@ const features = [
   {
     icon: Users,
     title: "Multi-role Access",
-    description: "Separate dashboards for customers, agents, and administrators",
+    description:
+      "Separate dashboards for customers, agents, and administrators",
     gradientFrom: "from-orange-600/20",
     gradientTo: "to-red-600/20",
     iconColor: "text-orange-400",
@@ -60,18 +63,18 @@ const features = [
 
 export default function Features() {
   return (
-    <section className="relative py-24">
+    <section className="relative py-16 sm:py-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-20">
-          <h2 className="text-4xl font-bold bg-gradient-to-r from-white via-blue-100 to-cyan-200 bg-clip-text text-transparent mb-6">
+        <div className="text-center mb-12 sm:mb-20">
+          <h2 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-white via-blue-100 to-cyan-200 bg-clip-text text-transparent mb-4 sm:mb-6 px-2 sm:px-0">
             Why Choose Bhejo?
           </h2>
-          <p className="text-xl text-slate-400">
+          <p className="text-lg sm:text-xl text-slate-400 px-2 sm:px-0">
             Everything you need to manage your courier operations efficiently
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {features.map((feature, index) => (
             <FeatureCard key={index} {...feature} />
           ))}

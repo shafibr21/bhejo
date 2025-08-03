@@ -3,7 +3,12 @@ import { Package } from "lucide-react";
 const footerSections = [
   {
     title: "Services",
-    links: ["Parcel Delivery", "Express Shipping", "COD Services", "Bulk Orders"],
+    links: [
+      "Parcel Delivery",
+      "Express Shipping",
+      "COD Services",
+      "Bulk Orders",
+    ],
   },
   {
     title: "Support",
@@ -17,11 +22,11 @@ const footerSections = [
 
 export default function Footer() {
   return (
-    <footer className="relative mt-24 backdrop-blur-sm bg-slate-900/50 border-t border-slate-700/50 text-white py-16">
+    <footer className="relative mt-16 sm:mt-24 backdrop-blur-sm bg-slate-900/50 border-t border-slate-700/50 text-white py-12 sm:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div>
-            <div className="flex items-center mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="sm:col-span-2 md:col-span-1">
+            <div className="flex items-center mb-4 sm:mb-6">
               <div className="relative">
                 <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/50 to-purple-600/50 rounded-full blur animate-pulse"></div>
                 <div className="relative bg-gradient-to-r from-blue-600 to-purple-600 p-2 rounded-full">
@@ -32,19 +37,21 @@ export default function Footer() {
                 Bhejo
               </span>
             </div>
-            <p className="text-slate-400 leading-relaxed">
+            <p className="text-slate-400 leading-relaxed text-sm sm:text-base">
               Professional courier management system for modern logistics.
             </p>
           </div>
-          
+
           {footerSections.map((section, index) => (
-            <div key={index}>
-              <h3 className="font-semibold mb-6 text-slate-200">{section.title}</h3>
-              <ul className="space-y-3 text-slate-400">
+            <div key={index} className="text-center sm:text-left">
+              <h3 className="font-semibold mb-4 sm:mb-6 text-slate-200">
+                {section.title}
+              </h3>
+              <ul className="space-y-2 sm:space-y-3 text-slate-400">
                 {section.links.map((link, linkIndex) => (
                   <li
                     key={linkIndex}
-                    className="hover:text-slate-300 transition-colors duration-200 cursor-pointer"
+                    className="hover:text-slate-300 transition-colors duration-200 cursor-pointer text-sm sm:text-base"
                   >
                     {link}
                   </li>
@@ -53,8 +60,10 @@ export default function Footer() {
             </div>
           ))}
         </div>
-        <div className="border-t border-slate-700/50 mt-12 pt-8 text-center text-slate-400">
-          <p>&copy; 2025 Bhejo. All rights reserved.</p>
+        <div className="border-t border-slate-700/50 mt-8 sm:mt-12 pt-6 sm:pt-8 text-center text-slate-400">
+          <p className="text-sm sm:text-base">
+            &copy; 2025 Bhejo. All rights reserved.
+          </p>
         </div>
       </div>
     </footer>

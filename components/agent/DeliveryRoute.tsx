@@ -179,7 +179,7 @@ export function DeliveryRoute({
           <h2 className="text-2xl font-bold bg-gradient-to-r from-white via-orange-100 to-cyan-200 bg-clip-text text-transparent">
             Delivery Route
           </h2>
-          <span className="px-3 py-1 bg-slate-800/60 border border-slate-700/50 rounded-full text-sm text-slate-300">
+          <span className="px-1 py-1 md:px-3 bg-slate-800/60 border border-slate-700/50 rounded-xl text-sm text-slate-300">
             {optimizedRoute.length} stops
           </span>
           <div className="flex-1 h-px bg-gradient-to-r from-orange-500/50 to-transparent"></div>
@@ -188,7 +188,7 @@ export function DeliveryRoute({
           <button
             onClick={optimizeRoute}
             disabled={isOptimizing}
-            className="px-4 py-2 bg-gradient-to-r from-orange-600/80 to-cyan-600/80 hover:from-orange-500/90 hover:to-cyan-500/90 disabled:from-slate-700/50 disabled:to-slate-600/50 text-white rounded-lg border border-orange-500/30 hover:border-orange-400/50 disabled:border-slate-600/30 transition-all duration-200 flex items-center gap-2 text-sm font-medium disabled:cursor-not-allowed"
+            className="px-2 py-1 md:px-4 md:py-2 bg-gradient-to-r from-orange-600/80 to-cyan-600/80 hover:from-orange-500/90 hover:to-cyan-500/90 disabled:from-slate-700/50 disabled:to-slate-600/50 text-white rounded-lg border border-orange-500/30 hover:border-orange-400/50 disabled:border-slate-600/30 transition-all duration-200 flex items-center gap-2 text-sm font-medium disabled:cursor-not-allowed"
           >
             <Navigation className="h-4 w-4" />
             {isOptimizing ? "Optimizing..." : "Optimize Route"}

@@ -124,7 +124,7 @@ export default function TrackingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 rounded-3xl p-2 md:p-8">
       <div className="space-y-8">
         {/* Page Header */}
         <div className="relative">

@@ -29,7 +29,8 @@ export default function CustomerHistory() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 flex items-center justify-center p-8">
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 flex items-center justify-center 
+     p-8">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-2 border-slate-600 border-t-blue-500 mx-auto mb-4"></div>
           <p className="text-slate-300">Loading your booking history...</p>
@@ -40,7 +41,7 @@ export default function CustomerHistory() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 flex items-center justify-center p-8">
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 flex items-center justify-center p-2 md:p-8 rounded-3xl">
         <div className="relative">
           <div className="absolute -inset-0.5 bg-gradient-to-r from-red-600/20 via-red-500/20 to-red-600/20 rounded-2xl blur opacity-30"></div>
           <div className="relative bg-slate-900/90 backdrop-blur-sm border border-slate-800/50 rounded-2xl shadow-xl p-8">
@@ -54,7 +55,7 @@ export default function CustomerHistory() {
   const stats = getStatusStats();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 p-2 md:p-8 rounded-3xl">
       <div className="space-y-8">
         {/* Page Header */}
         <div className="relative">

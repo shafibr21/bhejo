@@ -52,7 +52,7 @@ export default function QRCodePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 p-2 md:p-8 rounded-3xl">
       <div className="space-y-8">
         {/* Header with Back Button */}
         <div className="relative">
